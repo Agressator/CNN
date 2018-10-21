@@ -1,5 +1,9 @@
 import sys
+import os
 from argparse import ArgumentParser
+from app.mnist_data import MNISTData
+
+MNIST_DATA_PATH = os.path.join(os.path.dirname(os.getcwd()), 'mnist_data')
 
 
 def create_args_parser(argv=sys.argv[1:]):
@@ -14,3 +18,7 @@ def create_args_parser(argv=sys.argv[1:]):
 
 if __name__ == '__main__':
     args = create_args_parser()
+
+    mnist = MNISTData(MNIST_DATA_PATH)
+    test_images, test_labels = mnist.get_test_data()
+    train_images, train_labels = mnist.get_train_data()
