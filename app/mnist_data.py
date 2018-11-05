@@ -12,5 +12,11 @@ class MNISTData(MNIST):
 
     def get_train_data(self):
         train_images, train_labels = self.load_training()
-        return train_images, train_labels
+        adapt_train_labels = list()
+        for label in train_labels:
+            adapt_label = [0 for i in range(10)]
+            adapt_label[label] = 1
+            adapt_train_labels.append(adapt_label)
+
+        return train_images, adapt_train_labels
 

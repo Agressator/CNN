@@ -26,4 +26,5 @@ if __name__ == '__main__':
     train_images, train_labels = mnist.get_train_data()
 
     neural_network = NeuralNetwork(args.hidden_size)
-    neural_network.train(train_images, train_labels)
+    neural_network.train(train_images[0], train_labels[0])
+    pass
