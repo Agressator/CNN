@@ -12,5 +12,5 @@ class MNISTData(MNIST):
 
     def get_train_data(self):
         train_images, train_labels = self.load_training()
-        return  train_images, train_labels
+        return train_images, train_labels
 
