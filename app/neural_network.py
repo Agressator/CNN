@@ -13,7 +13,9 @@ class NeuralNetwork:
 
     def _feed_forward(self, inputs: list):
         hidden_layer_outputs = self._hidden_layer.feed_forward(inputs)
-        return self._output_layer.feed_forward(hidden_layer_outputs)
+        output_layer_outputs = self._output_layer.feed_forward(hidden_layer_outputs)
+
+        return output_layer_outputs
 
     def train(self, training_inputs: list, training_outputs: list):
         self._feed_forward(training_inputs)
