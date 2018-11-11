@@ -1,5 +1,5 @@
 import numpy as np
-from app.neuron import Neuron
+from app.neurons.sigmoid_neuron import Neuron
 
 
 class NeuronLayer:

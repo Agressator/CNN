@@ -1,5 +1,5 @@
-from app.neuron_layer import NeuronLayer
-from app.activation_functions import sigmoid, softmax
+from app.neuron_layers.neuron_layer import NeuronLayer
+from app.activation_functions import sigmoid
 
 INPUT_SIZE = 784
 OUTPUT_SIZE = 10
