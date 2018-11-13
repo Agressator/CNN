@@ -1,32 +1,24 @@
 import numpy as np
-from app.neuron import Neuron
+from app.neuron_layers.neuron_layer import NeuronLayer
 
 
-class NeuronLayer:
+class OutputNeuronLayer(NeuronLayer):
     def __init__(self, num_neurons: int, inputs_layer_size: int):
-        self._neurons = []
-        for count in range(num_neurons):
-            weights = self._init_weights_from_inputs_to_current_layer_neurons(inputs_layer_size)
-            self._neurons.append(Neuron(weights))
+        super().__init__(num_neurons, inputs_layer_size)
 
-    def _init_weights_from_inputs_to_current_layer_neurons(self, inputs_neurons_count: int, weights: list=None):
-        if weights and inputs_neurons_count == len(weights):
-            return weights
-
-        return 2 * np.random.rand(inputs_neurons_count) - 1
-
-    def _softmax(self, arg, inputs):
-        exp_input = [np.exp(input_value) for input_value in inputs]
-        return np.exp(arg) / sum(exp_input)
-
-    def feed_forward(self, inputs: list):
+    def _softmax(self, inputs: list):
         outputs = list()
-        total_inputs = list()
+        exp_total_inputs = list()
         for neuron in self._neurons:
-            total_inputs.append((neuron.calculate_total_net_input(inputs), neuron))
+            exp_total_inputs.append(np.exp(neuron.calculate_total_net_input(inputs)))
 
-        for total_input in total_inputs:
-            neuron.output = self._softmax(total_input, total_inputs)
+        sum_exp_input = sum(exp_total_inputs)
+        for exp_input, neuron in zip(exp_total_inputs, self._neurons):
+            neuron.output = exp_input / sum_exp_input
             outputs.append(neuron.output)
 
+        return outputs
+
+    def feed_forward(self, inputs: list):
+        outputs = self._softmax(inputs)
         return outputs
