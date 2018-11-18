@@ -10,6 +10,11 @@ class NeuronLayer(ABC):
             weights = self._init_weights_from_inputs_to_current_layer_neurons(inputs_layer_size)
             self._neurons.append(Neuron(weights))
 
+    def get_neurons(self):
+        return self._neurons
+
+    neurons = property(get_neurons)
+
     def _init_weights_from_inputs_to_current_layer_neurons(self, inputs_neurons_count: int, weights: list=None):
         if weights and inputs_neurons_count == len(weights):
             return weights

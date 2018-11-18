@@ -33,4 +33,5 @@ class NeuralNetwork:
     def train(self, training_inputs: list, training_outputs: list):
         output = self._feed_forward(training_inputs)
         total_error = self._cross_entropy_error(output, training_outputs)
+        self._layers[1].update_weights(training_outputs, self._layers[0].neurons, self._learning_rate)
         pass
