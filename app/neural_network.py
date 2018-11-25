@@ -33,5 +33,22 @@ class NeuralNetwork:
     def train(self, training_inputs: list, training_outputs: list):
         output = self._feed_forward(training_inputs)
         total_error = self._cross_entropy_error(output, training_outputs)
-        self._layers[1].update_weights(training_outputs, self._layers[0].neurons, self._learning_rate)
+
+        error_derivatives_to_input = self._layers[1].update_weights(training_outputs,
+                                                                    self._layers[0].neurons,
+                                                                    self._learning_rate)
+
+        # hidden_neurons_weights = list()
+        # for hidden_neuron_num in range(len(self._layers[0].neurons)):
+        #     hidden_neurons_weights.append(
+        #         [output_neurons.get_weight(hidden_neuron_num) for output_neurons in self._layers[1].neurons]
+        #     )
+        # error_derivatives_to_hidden_output = list()
+        # for hidden_neuron in hidden_neurons_weights:
+        #     error_derivative_to_hidden_output = 0
+        #     for error_derivative_to_input, weights in zip(error_derivatives_to_input, hidden_neuron):
+        #         error_derivative_to_hidden_output += error_derivative_to_input * weights
+        #     error_derivatives_to_hidden_output.append(error_derivative_to_hidden_output)
+
+        self._layers[0].update_weights(error_derivatives_to_input, self._layers[1].neurons, self._learning_rate)
         pass
