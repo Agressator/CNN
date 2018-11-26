@@ -1,6 +1,5 @@
 import numpy as np
 
-from app.neuron import Neuron
 from app.neuron_layers.neuron_layer import NeuronLayer
 
 
@@ -22,22 +21,24 @@ class HiddenNeuronLayer(NeuronLayer):
 
         return outputs
 
-    def update_weights(self, error_derivatives_to_output_input: list, output_neurons: list, learning_rate: float):
-        for neuron_num in range(len(self._neurons)):
+    def update_weights(self, network_input: list, error_derivatives_to_output_input: list, output_neurons: list,
+                       learning_rate: float):
+        for neuron_num, neuron in enumerate(self._neurons):
             error_derivative_to_hidden_output, hidden_output_derivative_to_hidden_input = \
-                self._calculate_error(output_neurons,
-                                      error_derivatives_to_output_input,
-                                      neuron_num,
-                                      self._total_inputs[neuron_num])
-            pass
-        pass
+                self._calculate_derivatives(output_neurons,
+                                            error_derivatives_to_output_input,
+                                            neuron_num,
+                                            self._total_inputs[neuron_num])
+            for i in range(len(network_input)):
+                delta_weight = error_derivative_to_hidden_output * hidden_output_derivative_to_hidden_input * \
+                               network_input[i]
+                neuron.set_weight(i, neuron.get_weight(i) - (learning_rate * delta_weight))
 
-    # TODO: rename method
-    def _calculate_error(self,
-                         output_neurons: list,
-                         error_derivatives_to_input: list,
-                         hidden_neuron_num: int,
-                         hidden_input: float):
+    def _calculate_derivatives(self,
+                               output_neurons: list,
+                               error_derivatives_to_input: list,
+                               hidden_neuron_num: int,
+                               hidden_input: float):
         hidden_output_derivative_to_hidden_input = self._sigmoid(hidden_input) * (1 - self._sigmoid(hidden_input))
 
         hidden_neuron_weights = [output_neurons.get_weight(hidden_neuron_num) for output_neurons in output_neurons]

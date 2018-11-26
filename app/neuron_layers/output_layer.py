@@ -25,10 +25,10 @@ class OutputNeuronLayer(NeuronLayer):
     def update_weights(self, targets: list, hidden_layer_outputs: list, learning_rate: float):
         error_derivatives_to_input = list()
         for neuron, target, input_exp in zip(self._neurons, targets, self._exp_total_inputs):
-            error_derivative_to_output, output_derivative_to_input = self._calculate_error(target,
-                                                                                           neuron,
-                                                                                           input_exp,
-                                                                                           len(targets))
+            error_derivative_to_output, output_derivative_to_input = self._calculate_derivatives(target,
+                                                                                                 neuron,
+                                                                                                 input_exp,
+                                                                                                 len(targets))
             error_derivative_to_input = error_derivative_to_output * output_derivative_to_input
             error_derivatives_to_input.append(error_derivative_to_input)
             for i in range(len(hidden_layer_outputs)):
@@ -37,7 +37,7 @@ class OutputNeuronLayer(NeuronLayer):
 
         return error_derivatives_to_input
 
-    def _calculate_error(self, target: int, neuron: Neuron, input_exp: float, layer_size: int):
+    def _calculate_derivatives(self, target: int, neuron: Neuron, input_exp: float, layer_size: int):
         error_derivative_to_output = - (target / neuron.output + (1 - target) / (1 - neuron.output)) / layer_size
         output_derivative_to_input = (input_exp * (self._sum_exp_input - input_exp)) / (self._sum_exp_input ** 2)
 
