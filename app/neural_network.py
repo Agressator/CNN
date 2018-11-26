@@ -8,12 +8,13 @@ OUTPUT_SIZE = 10
 
 
 class NeuralNetwork:
-    def __init__(self, hidden_layer_size: int, learning_rate: float):
+    def __init__(self, hidden_layer_size: int, learning_rate: float, epoch: int):
         self._layers = [
             HiddenNeuronLayer(hidden_layer_size, INPUT_SIZE),
             OutputNeuronLayer(OUTPUT_SIZE, hidden_layer_size)
         ]
         self._learning_rate = learning_rate
+        self._epoch = epoch
 
     def _feed_forward(self, inputs: list):
         current_inputs = inputs
@@ -31,14 +32,19 @@ class NeuralNetwork:
         return -total_error/len(computed)
 
     def train(self, training_inputs: list, training_outputs: list):
-        output = self._feed_forward(training_inputs)
-        total_error = self._cross_entropy_error(output, training_outputs)
+        for _ in range(self._epoch):
+            output = self._feed_forward(training_inputs)
+            print("Network output: {}".format(output))
+            print("Expected output: {}".format(training_outputs))
 
-        error_derivatives_to_input = self._layers[1].update_weights(training_outputs,
-                                                                    self._layers[0].neurons,
-                                                                    self._learning_rate)
-        self._layers[0].update_weights(training_inputs,
-                                       error_derivatives_to_input,
-                                       self._layers[1].neurons,
-                                       self._learning_rate)
+            total_error = self._cross_entropy_error(output, training_outputs)
+            print("Total error: {}".format(total_error))
+
+            error_derivatives_to_input = self._layers[1].update_weights(training_outputs,
+                                                                        self._layers[0].neurons,
+                                                                        self._learning_rate)
+            self._layers[0].update_weights(training_inputs,
+                                           error_derivatives_to_input,
+                                           self._layers[1].neurons,
+                                           self._learning_rate)
         pass
